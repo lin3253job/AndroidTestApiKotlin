@@ -19,7 +19,6 @@ class FirstFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity
     }
 
 
@@ -33,7 +32,7 @@ class FirstFragment : Fragment() {
         tvName = view.findViewById(R.id.tvName)
         btGetApi = view.findViewById(R.id.btGetApi)
 
-
+        //跳轉至二頁
         btGetApi?.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_secondFragment)
         }

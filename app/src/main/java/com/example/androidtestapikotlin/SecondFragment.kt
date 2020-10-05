@@ -23,19 +23,16 @@ import org.json.JSONArray
  * A simple [Fragment] subclass.
  */
 class SecondFragment : Fragment() {
-//    private var rvColors: RecyclerView? = null
-    var colorData: String? = null
+
+    private var colorData: String? = null
     var jsonArray: JSONArray? = null
     var colorList = mutableListOf<Color>()
-    val scope=  MainScope()
-
+    private val scope = MainScope()
     private lateinit var colorAdapter: ColorAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity
-
     }
 
 
@@ -50,7 +47,7 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //執行緒 抓data
+        //開執行緒 抓data
         scope.launch {
             colorData =
                 CommonTask().getRemotoData("https://jsonplaceholder.typicode.com/photos")
@@ -71,7 +68,12 @@ class SecondFragment : Fragment() {
 
 }
 
-private class ColorAdapter(private val mData: MutableList<Color>, private val scope: CoroutineScope) :
+
+//自定義Adapter
+private class ColorAdapter(
+    private val mData: MutableList<Color>,
+    private val scope: CoroutineScope
+) :
     RecyclerView.Adapter<ColorAdapter.MyViewHolder>() {
 
 
@@ -85,16 +87,17 @@ private class ColorAdapter(private val mData: MutableList<Color>, private val sc
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        var color = mData[position]
+        val color = mData[position]
 
         holder.itemView.tvId.text = color.id.toString()
         holder.itemView.tvTitle.text = color.title
         holder.ivColor.setImageResource(R.drawable.ic_launcher_foreground)
         holder.loadImage(color.thumbnailUrl)
         holder.itemView.setOnClickListener {
-          val bundle = Bundle()
-              bundle.putParcelable("color",color)
-            Navigation.findNavController(it).navigate(R.id.action_secondFragment_to_thirdFragment,bundle)
+            val bundle = Bundle()
+            bundle.putParcelable("color", color)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_secondFragment_to_thirdFragment, bundle)
         }
 
     }
@@ -107,17 +110,17 @@ private class ColorAdapter(private val mData: MutableList<Color>, private val sc
 
     class MyViewHolder(v: View, private val scope: CoroutineScope) : RecyclerView.ViewHolder(v) {
 
-        var job: Job?=  null
+        var job: Job? = null
 
         val tvId: TextView = itemView.tvId
         val tvTitle: TextView = itemView.tvTitle
-        val ivColor:ImageView = itemView.ivColor
+        val ivColor: ImageView = itemView.ivColor
 
 
         fun loadImage(url: String) {
             job?.cancel()
             job = scope.launch {
-                val bitmap=  CommonTask().getRemoteImage(url)
+                val bitmap = CommonTask().getRemoteImage(url)
                 ivColor.setImageBitmap(bitmap)
             }
         }

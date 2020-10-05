@@ -35,6 +35,8 @@ class ThirdFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        //拿到arguments後，將id及title塞入textView，再用網址去撈大張圖片呈現
         colorThrid = arguments?.getParcelable("color")
         tvId.text = colorThrid!!.id.toString()
         tvTitle.text = colorThrid!!.title

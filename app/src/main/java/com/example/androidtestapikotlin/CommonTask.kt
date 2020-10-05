@@ -3,15 +3,18 @@ package com.example.androidtestapikotlin
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
 public class CommonTask() {
 
+    //取Api中的資料
     suspend fun getRemotoData(url: String?): String?=  withContext(Dispatchers.IO) {
         val connection = URL(url).openConnection() as HttpURLConnection
         val inStr = StringBuilder()
@@ -56,7 +59,7 @@ public class CommonTask() {
 
     }
 
-
+    //用網址去抓取照片
     suspend fun getRemoteImage(url: String): Bitmap? = withContext(Dispatchers.IO){
         var connection = URL(url).openConnection() as HttpURLConnection
         var bitmap: Bitmap? = null
